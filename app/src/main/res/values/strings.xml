@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Notely</string>
+    <string name="app_icon">App Icon</string>
+    <string name="notes">Notes</string>
+    <string name="add_icon">Add Icon</string>
+    <string name="no_notes">No Notes</string>
+    <string name="create_note">Create Note</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+    <string name="update_note">Update Note</string>
 </resources>

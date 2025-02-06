@@ -5,14 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.MainActivity">
+    tools:context=".view.activities.NoteViewActivity">
 
     <TextView
-        android:id="@+id/tvTitleNotesText"
+        android:id="@+id/tvNoteTitleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/notes"
-        android:textSize="32sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="?attr/colorPrimary"
         android:paddingStart="20dp"
@@ -23,40 +22,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.050000012" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <TextView
+        android:id="@+id/tvNoteTimeStampView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleNotesText" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddNote"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondary"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_add"
-        android:contentDescription="@string/add_icon"
-        app:tint="?attr/colorOnSecondary"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNoteTitleView"
+        app:layout_constraintVertical_bias="0.00999999" />
 
     <TextView
-        android:id="@+id/tvNoNotes"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvNoteDescriptionView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_notes"
+        android:textSize="18sp"
+        android:textColor="?attr/colorPrimary"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/tvNoteTimeStampView"
+        app:layout_constraintVertical_bias="0.050000012" />
 </androidx.constraintlayout.widget.ConstraintLayout>
