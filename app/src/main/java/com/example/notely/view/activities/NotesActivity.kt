@@ -31,14 +31,27 @@ class NotesActivity : AppCompatActivity() {
         etTextDescriptionNote = findViewById(R.id.etTextDescriptionNote)
         btnSaveNote = findViewById(R.id.btnSaveNote)
 
+        val isEdit = intent.getBooleanExtra("isEdit", false)
+        var id = 0
+        if (isEdit) {
+            id = intent.getIntExtra("id", 0)
+            val title = intent.getStringExtra("title")
+            val description = intent.getStringExtra("description")
+            tvNoteTitle.text = getString(R.string.update_note)
+            etTextTitleNote.setText(title)
+            etTextDescriptionNote.setText(description)
+        }
+
         btnSaveNote.setOnClickListener {
             val title = etTextTitleNote.text.toString()
             val description = etTextDescriptionNote.text.toString()
 
             if (title.isNotEmpty() && description.isNotEmpty()) {
                 val intent = Intent()
+                intent.putExtra("id", id)
                 intent.putExtra("title", title)
                 intent.putExtra("description", description)
+                intent.putExtra("edit", isEdit)
                 setResult(RESULT_OK, intent)
                 finish()
             }

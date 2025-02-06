@@ -1,7 +1,6 @@
 package com.example.notely.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.notely.model.database.NotesDatabase
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class NotesViewModel(application: Application): AndroidViewModel(application) {
     val allNotes: LiveData<List<Note>>
-    val notesRepository: NotesRepository
+    private val notesRepository: NotesRepository
 
     init {
         val notesDao = NotesDatabase.getDatabase(application).notesDao()
@@ -24,6 +23,18 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
     fun addNote(note: Note) {
         CoroutineScope(Dispatchers.IO).launch {
             notesRepository.insert(note)
+        }
+    }
+
+    fun updateNote(note: Note) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notesRepository.updateNote(note)
+        }
+    }
+
+    fun deleteNote(note: Note) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notesRepository.deleteNote(note)
         }
     }
 }

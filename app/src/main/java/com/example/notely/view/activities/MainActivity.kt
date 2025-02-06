@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notely.R
@@ -50,29 +49,83 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = NotesViewModel(application)
 
-        viewModel.allNotes.observe(this, Observer {list ->
+        viewModel.allNotes.observe(this) { list ->
             if (list.isEmpty()) {
                 tvNoNotes.visibility = View.VISIBLE
             } else {
                 adapter.updateList(list)
                 tvNoNotes.visibility = View.GONE
             }
-        })
+        }
         val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                val title = data?.getStringExtra("title").toString()
-                val description = data?.getStringExtra("description").toString()
-                val currentTime = System.currentTimeMillis()
-                val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm")
-                val timeStamp = dateFormat.format(currentTime).toString()
-                val note = Note(0, title, description, timeStamp)
-                viewModel.addNote(note)
+                val data = result.data
+                val title = data?.getStringExtra("title")
+                val description = data?.getStringExtra("description")
+                val id = data?.getIntExtra("id", 0)
+                val edit = data?.getBooleanExtra("edit", false)
+
+                if (edit == true) {
+                    val note = Note(id!!, title!!, description!!, SimpleDateFormat("dd MMMM yyyy, HH:mm").format(System.currentTimeMillis()))
+                    viewModel.updateNote(note)
+                } else {
+                    val note = Note(title = title!!, description = description!!, timeStamp = SimpleDateFormat("dd MMMM yyyy, HH:mm").format(System.currentTimeMillis()))
+                    viewModel.addNote(note)
+                }
             }
         }
         btnAddNote.setOnClickListener {
             val intent = Intent(this, NotesActivity::class.java)
             launcher.launch(intent)
         }
+
+        adapter.setOnItemClickLister(object : NotesAdapter.ItemClickListener{
+            override fun onLongClick(note: Note) {
+                val intent = Intent(this@MainActivity, NotesActivity::class.java)
+                intent.putExtra("isEdit", true)
+                intent.putExtra("id", note.id)
+                intent.putExtra("title", note.title)
+                intent.putExtra("description", note.description)
+                launcher.launch(intent)
+            }
+
+            override fun onClick(note: Note) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val note = adapter.list[position]
+                val alertDialog = AlertDialog.Builder(this@MainActivity)
+                alertDialog.setTitle("Delete Note")
+                alertDialog.setMessage("Are you sure you want to delete this note?")
+
+                alertDialog.setPositiveButton("Yes") { _, _ ->
+                    viewModel.deleteNote(note)
+                }
+
+                alertDialog.setNegativeButton("No") { dialog, _ ->
+                    adapter.notifyItemChanged(position)
+                    dialog.dismiss()
+                }
+                val dialog = alertDialog.create()
+                dialog.show()
+            }
+
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
     }
 }

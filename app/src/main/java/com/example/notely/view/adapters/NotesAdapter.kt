@@ -11,7 +11,8 @@ import com.example.notely.model.entities.Note
 
 class NotesAdapter: RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
-    private var list: List<Note> = listOf()
+    var list = mutableListOf<Note>()
+    private var listener: ItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_each_note, parent, false)
         return NotesViewHolder(view)
@@ -26,6 +27,15 @@ class NotesAdapter: RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
         holder.tvTitle.text = note.title
         holder.tvTimeStamp.text = note.timeStamp
         holder.tvDescription.text = note.description
+
+        holder.itemView.setOnClickListener {
+            listener?.onClick(note)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            listener?.onLongClick(note)
+            true
+        }
     }
 
     class NotesViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -37,7 +47,18 @@ class NotesAdapter: RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateList(newList: List<Note>) {
-        list = newList
+        list.clear()
+        list.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickLister(listener: ItemClickListener) {
+        this.listener = listener
+    }
+
+    interface ItemClickListener {
+        fun onLongClick(note: Note)
+
+        fun onClick(note: Note)
     }
 }
