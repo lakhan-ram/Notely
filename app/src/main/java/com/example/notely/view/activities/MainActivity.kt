@@ -1,8 +1,12 @@
 package com.example.notely.view.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,6 +27,19 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        recyclerView = findViewById(R.id.recyclerView)
+        btnAddNote = findViewById(R.id.btnAddNote)
+        tvNoNotes = findViewById(R.id.tvNoNotes)
+
+        val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+            }
+        }
+        btnAddNote.setOnClickListener {
+            val intent = Intent(this, NotesActivity::class.java)
+            launcher.launch(intent)
         }
     }
 }
