@@ -1,5 +1,6 @@
 package com.example.notely.view.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import com.example.notely.model.entities.Note
 
 class NotesAdapter: RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
-    val list: List<Note> = listOf()
+    private var list: List<Note> = listOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_each_note, parent, false)
         return NotesViewHolder(view)
@@ -31,5 +32,12 @@ class NotesAdapter: RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
         val tvTitle: TextView = view.findViewById(R.id.tvNoteTitle)
         val tvTimeStamp: TextView = view.findViewById(R.id.tvNoteTimeStamp)
         val tvDescription: TextView = view.findViewById(R.id.tvNoteDescription)
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newList: List<Note>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }
