@@ -90,7 +90,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onClick(note: Note) {
-                TODO("Not yet implemented")
+                val intent = Intent(this@MainActivity, NoteViewActivity::class.java)
+                intent.putExtra("title", note.title)
+                intent.putExtra("timeStamp", note.timeStamp)
+                intent.putExtra("description", note.description)
+                startActivity(intent)
             }
 
         })
