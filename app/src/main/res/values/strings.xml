@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Notely</string>
     <string name="app_icon">App Icon</string>
+    <string name="notes">Notes</string>
+    <string name="add_icon">Add Icon</string>
+    <string name="no_notes">No Notes</string>
 </resources>
